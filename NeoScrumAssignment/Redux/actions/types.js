@@ -1,2 +1,6 @@
 export const GET_DASHBOARD ='GET_DASHBOARD';
 export const GET_FEEDBACK = 'GET_FEEDBACK';
+export const ADD_FEEDBACK = 'ADD_FEEDBACK';
+export const LOGIN_REQUEST ='LOGIN_REQUEST';
+export const LOGIN_SUCCESS ='LOGIN_SUCCESS';
+export const LOGIN_FALIURE ='LOGIN_FALIURE';

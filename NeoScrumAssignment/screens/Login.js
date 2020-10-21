@@ -4,9 +4,10 @@ import { globalStyles } from '../styles/styles';
 import Feather from 'react-native-vector-icons/Feather';
 import Card from './Card';
 import { useNavigation } from '@react-navigation/native';
+import { connect } from 'react-redux'
 
 
-export default function Login() {
+ function Login({userData,login}) {
 
     const [data, setState] = useState({
         email: '',
@@ -58,6 +59,9 @@ export default function Login() {
         }
 
     };
+    const handleSubmit =() =>{
+        // login(data)
+    }
     return (
         <TouchableWithoutFeedback onPress={() => {
             Keyboard.dismiss();
@@ -95,7 +99,7 @@ export default function Login() {
                     }
                     <View style={styles.buttons}>
                         <View style={{ width: 100, borderRadius: 4, marginTop:10}}>
-                            <Button title='Login' color='blue' onPress={() => { navigation.goBack() }} />
+                            <Button title='Login' color='blue' onPress={() => { handleSubmit()}} />
                         </View>
                         <TouchableOpacity onPress={() => { navigation.navigate('Register') }}>
                             <Text style={styles.underLineText}>Register Here</Text>
@@ -108,6 +112,18 @@ export default function Login() {
     )
 
 }
+
+const mapStateToProps = state => {
+    return {
+      userData: state.users
+    }
+  }
+  
+  const mapDispatchToProps = dispatch => {
+    return {
+      login: () => dispatch(login())
+    }
+  }
 
 const styles = StyleSheet.create({
     text: {
@@ -135,4 +151,5 @@ const styles = StyleSheet.create({
 
 })
 
+export default connect(mapStateToProps,mapDispatchToProps)(Login)
 

@@ -1,4 +1,4 @@
-import { GET_DASHBOARD ,GET_FEEDBACK} from './types';
+import { GET_DASHBOARD ,GET_FEEDBACK, ADD_FEEDBACK} from './types';
 import axios from 'axios';
 
 export const dashboardRequest =(feedback) =>{
@@ -12,6 +12,13 @@ export const feedbackRequest =(feedback) =>{
     return{
         type: GET_FEEDBACK,
         data: feedback
+    }
+}
+
+export const addfeddback =(feedback)=>{
+    return{
+        type: ADD_FEEDBACK,
+        data:feedback
     }
 }
 

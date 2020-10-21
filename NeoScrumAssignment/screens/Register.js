@@ -5,6 +5,7 @@ import ImagePicker from 'react-native-image-picker';
 import Card from './Card';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
 
 
 export default function Register() {
@@ -78,6 +79,14 @@ export default function Register() {
         }
 
     }
+    const handleSubmit = () =>{
+        // axios.post('',{
+
+        // })
+        // .then()
+        // .catch()
+        navigation.goBack();
+    }
     
     return (
         <TouchableWithoutFeedback onPress={() =>{
@@ -119,7 +128,7 @@ export default function Register() {
                     <Image source={{ uri: data.photo.uri }}
                         style={{ width: 30, height: 30 }} />
                     <View style={{width:100, borderRadius:4,marginTop:10}}>
-                    <Button title ='Register' color='blue' onPress={()=>{navigation.goBack()}}/>
+                    <Button title ='Register' color='blue' onPress={()=>{handleSubmit()}}/>
                     </View>
                     
                 </Card>
