@@ -1,0 +1,2 @@
+export const GET_DASHBOARD ='GET_DASHBOARD';
+export const GET_FEEDBACK = 'GET_FEEDBACK';
