@@ -1,12 +1,18 @@
 import React, { Component, useState } from 'react';
 import { StyleSheet, View, Text, TextInput, TouchableWithoutFeedback, Keyboard, TouchableOpacity ,Button} from 'react-native';
 import { globalStyles } from '../styles/styles';
-import Feather from 'react-native-vector-icons/Feather';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Card from './Card';
 import { useNavigation } from '@react-navigation/native';
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
+import {login} from '../Redux/actions/loginAction';
 
-
+/**
+ * @author Devashree Patole
+ * @description This is the Login Screen into which the user has to login 
+ *              with the email and Password.
+ * @returns JSX of Login screen
+ */
  function Login({userData,login}) {
 
     const [data, setState] = useState({
@@ -15,20 +21,20 @@ import { connect } from 'react-redux'
         isEmailvalid: true,
         isPwdvalid: true
     })
-    const [text, changeText] = useState('');
-    const [pwd, changePwd] = useState('');
+   const [eyeStyle,seteyeStyle] = useState('eye-slash');
+   const [displayPassword, setPassword] = useState(true);
     const navigation = useNavigation();
 
     const handleEmail = (val) => {
         const exp = '^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$';
-        console.log(val)
+        // console.log(val)
         if (val.match(exp)) {
             setState({
                 ...data,
                 email: val,
                 isEmailvalid: true
             });
-            console.log(data)
+            // console.log(data)
         }
         else {
             setState({
@@ -41,14 +47,14 @@ import { connect } from 'react-redux'
     };
 
     const handlePassword = (val) => {
-        console.log(val)
+        // console.log(val)
         if (val.trim().length >= 4) {
             setState({
                 ...data,
                 pwd: val,
                 isPwdvalid: true
             });
-            console.log(data)
+            // console.log(data)
         }
         else {
             setState({
@@ -60,7 +66,16 @@ import { connect } from 'react-redux'
 
     };
     const handleSubmit =() =>{
-        // login(data)
+        login(data);
+    }
+    const handleClick = () =>{
+        setPassword(!displayPassword);
+        if (eyeStyle === 'eye-slash') {
+            seteyeStyle('eye')
+        }
+        else {
+            seteyeStyle('eye-slash')
+        }
     }
     return (
         <TouchableWithoutFeedback onPress={() => {
@@ -70,10 +85,10 @@ import { connect } from 'react-redux'
                 <Text style={styles.text}>Neo<Text style={{ color: 'red' }}>SCRUM</Text></Text>
                 <Card>
                     <Text style={globalStyles.textHeader}>Login Page</Text>
-                    <Text style={{ fontSize: 18 }}>Email</Text>
+                    <Text style={{ fontSize: 18,marginBottom:0 }}>Email</Text>
                     <TextInput style={globalStyles.textInput}
                         keyboardType='email-address'
-                        onChangeText={(val) => { handleEmail(val) }}
+                        onChangeText={(val) =>  handleEmail(val) }
                         value={data.email}
                     />
                     {data.isEmailvalid ? null :
@@ -82,13 +97,16 @@ import { connect } from 'react-redux'
                         </View>
 
                     }
-                    <Text style={{ fontSize: 18 }}>Password</Text>
+                    <Text style={{ fontSize: 18 ,marginBottom:0}}>Password</Text>
                     <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
-                        <Feather style={styles.icon} name='eye-off' size={20} color='#05375a'></Feather>
+                        <FontAwesome style={styles.icon}
+                         name={eyeStyle} size={20} color='#05375a'
+                         onPress={()=>handleClick}
+                         ></FontAwesome>
                     </View>
                     <TextInput style={globalStyles.textInput}
-                        secureTextEntry
-                        onChangeText={(val) => { handlePassword(val) }}
+                        secureTextEntry={displayPassword}
+                        onChangeText={(val) => handlePassword(val) }
                         value={data.pwd}
                     />
                     {data.isPwdvalid ? null :
@@ -99,12 +117,18 @@ import { connect } from 'react-redux'
                     }
                     <View style={styles.buttons}>
                         <View style={{ width: 100, borderRadius: 4, marginTop:10}}>
-                            <Button title='Login' color='blue' onPress={() => { handleSubmit()}} />
+                            <Button title='Login' color='blue'
+                             onPress={() => { handleSubmit()}}
+                             disabled={!data.email.length > 0 || !data.pwd.length > 0 ||
+                              !data.isEmailvalid === true || !data.isPwdvalid ===true} />
                         </View>
                         <TouchableOpacity onPress={() => { navigation.navigate('Register') }}>
                             <Text style={styles.underLineText}>Register Here</Text>
                         </TouchableOpacity>
                     </View>
+                    <TouchableOpacity onPress={() => { navigation.navigate('ForgetPassword') }}>
+                            <Text style={styles.underLineText}>Forget Password?</Text>
+                        </TouchableOpacity>
                 </Card>
 
             </View>
@@ -115,13 +139,13 @@ import { connect } from 'react-redux'
 
 const mapStateToProps = state => {
     return {
-      userData: state.users
+      userData: state.userReducer.user
     }
   }
   
   const mapDispatchToProps = dispatch => {
     return {
-      login: () => dispatch(login())
+      login: (data) => dispatch(login(data))
     }
   }
 
@@ -133,7 +157,10 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     },
     icon: {
-        alignItems: 'flex-end'
+        
+        position:'absolute',
+        right:25,
+        top:20
 
     },
     underLineText: {

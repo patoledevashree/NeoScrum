@@ -12,54 +12,46 @@ import {
     Switch
 } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { connect } from 'react-redux';
+import { SignOut } from '../Redux/actions/signOutAction';
 
-export default function DrawerContent(props) {
+/**
+ * @author Devashree Patole
+ * @description This file contains the code for custom drawer.
+ *              User information with the image profile is shown.
+ * @returns JSX of the custom drawer navigation of screens.
+ */
+
+function DrawerContent(props) {
+    const logOut = ()=>{
+        props.SignOut()
+    }
     return (
         <View style={{ flex: 1 }}>
             <DrawerContentScrollView {...props}>
                 <View style={styles.drawerContent}>
                     <View style={styles.userInfo}>
                         <View>
+                            {props.user.user_image?
                             <Avatar.Image
                                 source={{
-                                    uri: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg'
+                                    uri: props.user.user_image
                                 }}
                                 rounded
                                 size={100} />
+                            :<Avatar.Image
+                            source={require('../assests/images/avtar.png')}
+                            rounded
+                            size={100}
+                            />
+                            }
                         </View>
                     </View>
                     <View style={styles.userDetail}>
-                        <Title>Devashree Patole</Title>
-                        <Caption>Trainee Engineer</Caption>
+                        <Title>{props.user.user_name}</Title>
                     </View>
                     <Drawer.Section>
-                        {/* <DrawerItem
-                            icon={({ color, size }) => (
-                                <Icon name='home-outline'
-                                    color={color}
-                                    size={size} ></Icon>
-                            )}
-                            label='Dashboard'
-                            onPress={props.navigation.navigate('Dashboard')}
-                        />
-                        <DrawerItem
-                            icon={({ color, size }) => (
-                                <Icon name='pencil-outline'
-                                    color={color}
-                                    size={size} ></Icon>
-                            )}
-                            label='Add FeedBack'
-                            onPress={props.navigation.navigate('Feedback')}
-                        /> */}
                         <DrawerItemList {...props}/>
-                    </Drawer.Section>
-                    <Drawer.Section title='Prefrence'>
-                        <TouchableRipple>
-                            <View style={styles.prefrence}>
-                                <Text>Dark Theme</Text>
-                                <Switch />
-                            </View>
-                        </TouchableRipple>
                     </Drawer.Section>
                 </View>
             </DrawerContentScrollView>
@@ -71,11 +63,22 @@ export default function DrawerContent(props) {
                             size={size} ></Icon>
                     )}
                     label='LogOut'
+                    onPress={()=>logOut()}
                 />
             </Drawer.Section>
 
         </View>
     )
+}
+const mapStateToProps = state => {
+    return {
+      user: state.userReducer.user
+    }
+  } 
+const mapDispatchToProps = dispatch => {
+    return {
+        SignOut: () => dispatch(SignOut())
+    }
 }
 
 const styles = StyleSheet.create({
@@ -100,3 +103,6 @@ const styles = StyleSheet.create({
       paddingHorizontal: 16,
     }
 })
+
+
+export default connect(mapStateToProps,mapDispatchToProps)(DrawerContent)

@@ -9,10 +9,17 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createStackNavigator } from "@react-navigation/stack";
 import DrawerContent from './DrawerContent';
-import Feedback from './Feedback';
+import SubmitFeedback from './SubmitFeedback';
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
+
+/**
+ * @author Devashree Patole
+ * @description This file contains the drawer navigation 
+ *              of dashboard and addfeedback screens.
+ * @returns navigation of screens
+ */
 
 export default class Navigation extends Component{
     render(){
@@ -25,19 +32,19 @@ export default class Navigation extends Component{
         </Stack.Navigator>
          createFeedbackStack = ({ navigation }) =>
          <Stack.Navigator>
-             <Stack.Screen name='Add Feedback' component={Feedback} 
+             <Stack.Screen name='Add Feedback' component={SubmitFeedback} 
              options={{ 
                  headerLeft: () => (
                 <Icon.Button name="ios-menu" size={25} color='black' backgroundColor='white' onPress={() => navigation.openDrawer()}></Icon.Button>) }} />
          </Stack.Navigator>
 
         return(
-            <NavigationContainer>
+            // <NavigationContainer>
                 <Drawer.Navigator drawerContent={props => <DrawerContent {...props}/>}>
                     <Drawer.Screen name ='Dashboard' component={createHomeStack} />
                     <Drawer.Screen name ='Add Feedback' component={createFeedbackStack}/>
                 </Drawer.Navigator>
-            </NavigationContainer>
+            // </NavigationContainer>
         )
     }
 }

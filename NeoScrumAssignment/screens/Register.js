@@ -1,18 +1,31 @@
 import React, { useEffect, useState } from 'react';
-import { TouchableOpacity, StyleSheet, View, Text, TextInput, Keyboard, Button, Image } from 'react-native';
+import {
+    TouchableOpacity,
+    StyleSheet,
+    View,
+    Text,
+    TextInput,
+    Keyboard,
+    Button,
+    Image, Alert
+} from 'react-native';
 import { globalStyles } from '../styles/styles'
 import ImagePicker from 'react-native-image-picker';
 import Card from './Card';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import { ScrollView, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
+import Toast from 'react-native-simple-toast';
 
-
+/**
+ * @author Devashree Patole
+ * @description This screen is for the user to register into the NeoscrumPropTypes.
+ *              It contains the Employee Name and Email of userPropTypes.
+ * @returns JSX of register page
+ */
 export default function Register() {
-    // const [empName, changeEmpName] = useState('');
-    // const [email, changeEmail] = useState('');
-    // const [photo, setPhoto] = useState('null')
-    const [data, setState] = useState({
+
+    const [register, setState] = useState({
         empName: '',
         email: '',
         photo: 'null',
@@ -20,10 +33,6 @@ export default function Register() {
         isvalidEmail: true,
     })
     const navigation = useNavigation();
-    useEffect(()=>{
-        console.log('Register Page')
-
-    },[])
 
     const handelPhoto = () => {
         const options = {
@@ -33,7 +42,7 @@ export default function Register() {
             console.log('response', response)
             if (response.uri) {
                 setState({
-                    ...data,
+                    ...register,
                     photo: response,
                 })
 
@@ -45,15 +54,15 @@ export default function Register() {
         console.log(val)
         if (val.trim().length != 0) {
             setState({
-                ...data,
+                ...register,
                 empName: val,
                 isvalidEmpName: true
             });
-            console.log(data)
+            console.log(register)
         }
         else {
             setState({
-                ...data,
+                ...register,
                 empName: val,
                 isvalidEmpName: false
             });
@@ -65,74 +74,90 @@ export default function Register() {
         const exp = '^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$';
         if (val.match(exp)) {
             setState({
-                ...data,
+                ...register,
                 email: val,
                 isvalidEmail: true,
             });
         }
         else {
             setState({
-                ...data,
+                ...register,
                 email: val,
                 isvalidEmail: false
             });
         }
 
     }
-    const handleSubmit = () =>{
-        // axios.post('',{
+    const handleSubmit = () => {
+        axios.post('http://180.149.241.208:3047/registration', {
+            user_name: register.empName,
+            user_email: register.email,
+            profile_image: register.photo
 
-        // })
-        // .then()
-        // .catch()
-        navigation.goBack();
+        })
+            .then(response => {
+                console.log(response)
+               Toast.show('Registered successfully');
+               navigation.goBack();
+            })
+            .catch(err => {
+                console.log(err)
+                Toast.show('Something Went Wrong')
+            })
     }
-    
+
     return (
-        <TouchableWithoutFeedback onPress={() =>{
+        <TouchableWithoutFeedback onPress={() => {
             Keyboard.dismiss();
         }}>
-            <View style={styles.container}>
-                <Text style={styles.text}>Neo<Text style={{ color: 'red' }}>SCRUM</Text></Text>
-                
-                <Card>
-                   
-                    <Text style={globalStyles.textHeader}>Enter New Developer</Text>
-                    <Text style={{ fontSize: 18 }}>Employee Name *</Text>
-                    <TextInput
-                        style={globalStyles.textInput}
-                        onChangeText={(val) => { handleEmpName(val) }}
-                        value={data.empName}
-                    />
-                    {data.isvalidEmpName ? null :
-                        <View>
-                            <Text style={{ color: 'red', fontSize: 12 }}>Employee name should not be empty</Text>
+            <ScrollView>
+                <View style={styles.container}>
+                    <Text style={styles.text}>Neo<Text style={{ color: 'red' }}>SCRUM</Text></Text>
+
+                    <Card>
+
+                        <Text style={globalStyles.textHeader}>Enter New Developer</Text>
+                        <Text style={{ fontSize: 18 }}>Employee Name *</Text>
+                        <TextInput
+                            style={globalStyles.textInput}
+                            onChangeText={(val) => { handleEmpName(val) }}
+                            value={register.empName}
+                        />
+                        {register.isvalidEmpName ? null :
+                            <View>
+                                <Text style={{ color: 'red', fontSize: 12 }}>Employee name should not be empty</Text>
+                            </View>
+
+                        }
+                        <Text style={{ fontSize: 18 }}>Email *</Text>
+                        <TextInput
+                            style={globalStyles.textInput}
+                            onChangeText={val => { handelEmail(val) }}
+                            value={register.email}
+                        />
+                        {register.isvalidEmail ? null :
+                            <View>
+                                <Text style={{ color: 'red', fontSize: 12 }}>Invalid Email</Text>
+                            </View>
+
+                        }
+                        <TouchableOpacity onPress={() => { handelPhoto() }}>
+                            <Text style={styles.photo}>Choose File</Text>
+                        </TouchableOpacity>
+                        <Image source={{ uri: register.photo.uri }}
+                            style={{ width: 30, height: 30 }} />
+                        <View style={{ width: 100, borderRadius: 4, marginTop: 10 }}>
+                            <Button title='Register' color='blue'
+                                onPress={() => handleSubmit()}
+                                disabled={!register.email.length > 0 || !register.empName.length > 0
+                                    || !register.isvalidEmail === true || !register.isvalidEmpName === true}
+                            />
                         </View>
 
-                    }
-                    <Text style={{ fontSize: 18 }}>Email *</Text>
-                    <TextInput
-                        style={globalStyles.textInput}
-                        onChangeText={val => { handelEmail(val) }}
-                        value={data.email}
-                    />
-                    {data.isvalidEmail ? null :
-                        <View>
-                            <Text style={{ color: 'red', fontSize: 12 }}>Invalid Email</Text>
-                        </View>
+                    </Card>
 
-                    }
-                    <TouchableOpacity onPress={() => { handelPhoto() }}>
-                        <Text style={styles.photo}>Choose File</Text>
-                    </TouchableOpacity>
-                    <Image source={{ uri: data.photo.uri }}
-                        style={{ width: 30, height: 30 }} />
-                    <View style={{width:100, borderRadius:4,marginTop:10}}>
-                    <Button title ='Register' color='blue' onPress={()=>{handleSubmit()}}/>
-                    </View>
-                    
-                </Card>
-            </View>
+                </View>
+            </ScrollView>
         </TouchableWithoutFeedback>
     )
 }
@@ -153,9 +178,9 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: 18
     },
-    container:{
-        marginHorizontal:50,
-        marginVertical:70
+    container: {
+        marginHorizontal: 50,
+        marginVertical: 70
     }
 })
 

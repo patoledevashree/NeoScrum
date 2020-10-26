@@ -17,6 +17,7 @@ export const globalStyles = StyleSheet.create({
         borderBottomColor:'#777',
         borderBottomWidth:1.5,
         width:250,
-        marginBottom:5
+        marginBottom:5,
+    
     }
 })

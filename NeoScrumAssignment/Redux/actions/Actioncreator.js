@@ -1,5 +1,6 @@
 import { GET_DASHBOARD ,GET_FEEDBACK, ADD_FEEDBACK} from './types';
 import axios from 'axios';
+import userReducer from '../reducers/userReducer';
 
 export const dashboardRequest =(feedback) =>{
     return{
@@ -22,11 +23,13 @@ export const addfeddback =(feedback)=>{
     }
 }
 
-export const getDashboard =(id) =>{
+export const getDashboard =(user) =>{
     return (dispatch) =>{
-        axios.get('')
+        const token = user.token;
+        axios.get('http://180.149.241.208:3047/feedback',{headers:{'Authorization':token}})
         .then(res=>{
             const feedback = res.data
+            console.log(res)
             dispatch(dashboardRequest(feedback));
         })
         .catch(err=>{
@@ -35,9 +38,10 @@ export const getDashboard =(id) =>{
     }
 }
 
-export const getFeedback = (id) => {
+export const getFeedback = (user) => {
     return(dispatch) =>{
-        axios.get('')
+        const token = user.token;
+        axios.get('http://180.149.241.208:3047/dashboard',{headers:{'Authorization':token}})
         .then(res=>{
             const feedback = res.data
             dispatch(feedbackRequest(feedback));

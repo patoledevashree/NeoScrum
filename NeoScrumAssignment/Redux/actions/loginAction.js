@@ -1,5 +1,6 @@
 import { LOGIN_REQUEST, LOGIN_SUCCESS , LOGIN_FALIURE} from '../actions/types';
-import { axios } from 'axios';
+import  axios  from 'axios';
+import Toast from 'react-native-simple-toast';
 
 export const loginRequest = ()=>{
     return{
@@ -22,16 +23,21 @@ export const loginFaliure = (error) =>{
 
 export const login =(data) =>{
     return (dispatch) =>{
+        console.log('Login APi')
         dispatch(loginRequest())
-        axios.post('',{
-            user_email: data.user_email,
-            user_pass:data.user_pass
+        axios.post('http://180.149.241.208:3047/login',{
+            user_email: data.email,
+            user_pass:data.pwd
         })
         .then(res => {
             const users = res.data
+            console.log(users)
+            Toast.show(users.message,Toast.LONG);
             dispatch(loginSuccess(users))
         })
         .catch(err=>{
+            console.log(err)
+            Toast.show('Something Went wrong');
             dispatch(loginFaliure(err.message))
         })
     }
