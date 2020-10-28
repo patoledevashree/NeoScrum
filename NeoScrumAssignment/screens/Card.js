@@ -1,6 +1,13 @@
 import React from 'react';
 import {View,Text,StyleSheet} from 'react-native';
 
+
+/**
+ * @author Devashree Patole
+ * @description This file contains a reusable card.Which can be used when a card is called. 
+ * @param {object} props View which is to be displayed inside the card.
+ * @returns JSX of card
+ */
 export default function Card(props){
     return(
         <View style={styles.card}>

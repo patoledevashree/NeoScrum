@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {View ,Text,TouchableOpacity} from 'react-native';
 
 import Dashboard from './Dashboard';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import FontAwesome from 'react-native-vector-icons/FontAwesome5';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 import { NavigationContainer } from '@react-navigation/native';
@@ -41,8 +41,27 @@ export default class Navigation extends Component{
         return(
             // <NavigationContainer>
                 <Drawer.Navigator drawerContent={props => <DrawerContent {...props}/>}>
-                    <Drawer.Screen name ='Dashboard' component={createHomeStack} />
-                    <Drawer.Screen name ='Add Feedback' component={createFeedbackStack}/>
+                    <Drawer.Screen name ='Dashboard' component={createHomeStack}
+                    options={{
+                        drawerIcon:(size)=>{
+                            return(
+                            <FontAwesome name='home'
+                            size={20}
+                           color={'#777'}
+                            />)
+                        }
+                    }} />
+                    <Drawer.Screen name ='Add Feedback' component={createFeedbackStack}
+                    options={{
+                        drawerIcon:(size)=>{
+                            return(
+                            <FontAwesome name='edit'
+                            size={20}
+                           color={'#777'}
+                            />)
+                        }
+                    }}
+                    />
                 </Drawer.Navigator>
             // </NavigationContainer>
         )

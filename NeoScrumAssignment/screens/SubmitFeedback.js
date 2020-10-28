@@ -18,18 +18,40 @@ const feedbackSchema = yup.object({
  * @description This screen provides the user the list of
  *               employees whome they have to give feed back.With the help of
  *              API the list is provided.
+ * @param {object} feedback List of the Feedback
+ * @param {object} user Detail of Loggedin user
+ * @param {function} getFeedback Function to get the receiver feedback
+ * @param {function} addFeedback Function to add Feedback
  * @returns JSX of the AddFeedback page
  */
-function Submitfeedback({ feedback, user, getFeedback }) {
-    useEffect(()=>{
-        getFeedback(user);
-    },[])
+function Submitfeedback({ feedback, user, getFeedback,addFeedback }) {
+    // useEffect(()=>{
+    //     getFeedback(user);
+    // },[])
+    const[data,setState]= useState([
+        {
+            "sender_id": 88,
+            "receiver_id": 97,
+            "receiver_name": "Shubham Soni",
+            "image_path": 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
+            "flags": false
+        },
+        {
+            "sender_id": 88,
+            "receiver_id": 87,
+            "receiver_name": "Shubham Gupta",
+            "image_path": 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
+            "flags": false
+        }
+      ])
     return (
         <View style={styles.container}>
-            {feedback.length > 0 ?
+            {console.log(feedback)}
+            {console.log(user)}
+            {data.length > 0 ?
                 <ScrollView>
                     {
-                        feedback.map((item) => {
+                        data.map((item) => {
                             return (
 
                                 <Formik
@@ -37,6 +59,7 @@ function Submitfeedback({ feedback, user, getFeedback }) {
                                     validationSchema={feedbackSchema}
                                     onSubmit={(values) => {
                                         console.log(values.text)
+                                        addFeedback(user,values,item.receiver_id)
                                     }}
                                 >
                                     {(props) => (
@@ -105,7 +128,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        getFeedback: (user) => dispatch(getFeedback(user))
+        getFeedback: (user) => dispatch(getFeedback(user)),
+        addFeedback: (user,values,id)=> dispatch(addFeedback(user,values,id))
     }
 }
 

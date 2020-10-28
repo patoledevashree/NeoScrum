@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet ,Alert} from 'react-native';
 import { DrawerContentScrollView, DrawerItem, DrawerItemList } from '@react-navigation/drawer';
 import {
     Avatar,
@@ -9,22 +9,40 @@ import {
     Paragraph,
     Drawer,
     TouchableRipple,
-    Switch
+    Switch,
 } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { connect } from 'react-redux';
 import { SignOut } from '../Redux/actions/signOutAction';
+import Toast from 'react-native-simple-toast';
 
 /**
  * @author Devashree Patole
  * @description This file contains the code for custom drawer.
  *              User information with the image profile is shown.
+ * @param {object} props Screens hich is to be displayed in drawer
  * @returns JSX of the custom drawer navigation of screens.
  */
 
 function DrawerContent(props) {
-    const logOut = ()=>{
+
+    const showTost=()=>{
         props.SignOut()
+        Toast.show('You Successfully Logged Out',Toast.LONG)
+    }
+    const logOut = ()=>{
+        Alert.alert('LogOut','Do you wnat to LogOut',[
+            {
+                text:'OK',
+                onPress : ()=> {showTost()},
+                
+            },
+            {
+                text:'Cancle'
+            }
+        ])
+       
+       
     }
     return (
         <View style={{ flex: 1 }}>

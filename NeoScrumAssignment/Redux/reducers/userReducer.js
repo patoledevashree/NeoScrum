@@ -1,4 +1,4 @@
-import { LOGIN_REQUEST, LOGIN_SUCCESS , LOGIN_FALIURE,SIGN_OUT} from '../actions/types';
+import { LOGIN_REQUEST, LOGIN_SUCCESS , LOGIN_FALIURE,SIGN_OUT,STORE_DATA} from '../actions/types';
 
 const initialState ={
     loading:false,
@@ -39,6 +39,14 @@ const userReducer =(state = initialState,action)=>{
                 ...state,
                 loading: false,
                 user:{},
+                error:''
+            }
+        }
+        case STORE_DATA:{
+            return{
+                ...state,
+                loading:false,
+                user:action.data,
                 error:''
             }
         }

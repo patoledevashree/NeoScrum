@@ -52,3 +52,19 @@ export const getFeedback = (user) => {
     }
 }
 
+export const addFeedback = (user,values,id) =>{
+    return(dispatch)=>{
+        const token = user.token;
+        axios.post('http://180.149.241.208:3047/addfeedback',{
+            receiver_id: id,
+            feedback_data: values.text
+        },{headers:{'Authorization':token}})
+        .then(res=>{
+            dispatch(getFeedback(user))
+        })
+        .catch(err=>{
+
+        })
+    }
+}
+

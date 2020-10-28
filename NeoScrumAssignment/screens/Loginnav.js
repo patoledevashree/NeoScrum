@@ -9,6 +9,12 @@ import SetPassword from './SetPassword';
 
 const Stack = createStackNavigator();
 
+/**
+ * @author Devashtree Patole
+ * @description This file is used for the stack navigation
+ *               between the screens Register ,ForgetPassword and Set Password.
+ * @returns JSX of the Navigation
+ */
 export default class Navigation extends Component {
     render() {
         return (
