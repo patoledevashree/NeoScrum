@@ -31,7 +31,7 @@ function DrawerContent(props) {
         Toast.show('You Successfully Logged Out',Toast.LONG)
     }
     const logOut = ()=>{
-        Alert.alert('LogOut','Do you wnat to LogOut',[
+        Alert.alert('Logout','Do you wnat to LogOut',[
             {
                 text:'OK',
                 onPress : ()=> {showTost()},
@@ -80,7 +80,7 @@ function DrawerContent(props) {
                             color={color}
                             size={size} ></Icon>
                     )}
-                    label='LogOut'
+                    label='Logout'
                     onPress={()=>logOut()}
                 />
             </Drawer.Section>
